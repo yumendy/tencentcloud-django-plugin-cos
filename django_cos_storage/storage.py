@@ -6,7 +6,7 @@ from django.utils._os import safe_join
 from django.utils.deconstruct import deconstructible
 from qcloud_cos import CosConfig, CosS3Client
 from qcloud_cos.cos_exception import CosServiceError
-import pkg_resources
+import importlib.metadata
 import os.path
 
 from .file import TencentCOSFile
@@ -35,7 +35,7 @@ class TencentCOSStorage(Storage):
 
         config_kwargs = config or setting.get("CONFIG", {})
         package_name = "cos-python-sdk-v5"  # 替换为您要查询的包的名称
-        version = pkg_resources.get_distribution(package_name).version
+        version = importlib.metadata.version(package_name)
         config_kwargs["UA"] = "tencentcloud-django-plugin-cos/0.0.1;cos-python-sdk-v5/" + version
         required = ["Region", "SecretId", "SecretKey"]
         for key in required:
